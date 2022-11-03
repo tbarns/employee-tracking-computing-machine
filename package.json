@@ -1,0 +1,24 @@
+{
+  "name": "employee-tracking-computing-machine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbarns/employee-tracking-computing-machine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tbarns/employee-tracking-computing-machine/issues"
+  },
+  "homepage": "https://github.com/tbarns/employee-tracking-computing-machine#readme",
+  "dependencies": {
+    "inquirer": "^9.1.4",
+    "mysql2": "^2.3.3"
+  }
+}
