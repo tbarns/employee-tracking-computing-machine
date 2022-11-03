@@ -1,3 +1,8 @@
+const inquirer = require('inquirer')
+
+
+
+
 init()
 //prompt user to use command line
 function init() {
@@ -7,7 +12,7 @@ function init() {
         type: 'list',
         name: 'selection',
         message: 'What would you like to do?',
-        choices: ['Update Employee Role', new inquirer.Separator(), 'View All Roles', new inquirer.Separator(), 'Add Role', new inquirer.Separator(), 'View All Departments', new inquirer.Separator(), 'Add Department', new inquirer.Separator(), 'Quit']
+        choices: ['Update Employee Role', new inquirer.Separator(), 'View All Roles', new inquirer.Separator(), 'Add Role', new inquirer.Separator(), 'View All Departments', new inquirer.Separator(), 'Add Department', new inquirer.Separator(), 'Quit', new inquirer.Separator(),, new inquirer.Separator(),, new inquirer.Separator(),]
       }
     ])
 

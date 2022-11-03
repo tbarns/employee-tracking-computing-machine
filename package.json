@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/tbarns/employee-tracking-computing-machine#readme",
   "dependencies": {
-    "inquirer": "^9.1.4",
+    "inquirer": "^8.2.4",
     "mysql2": "^2.3.3"
   }
 }
