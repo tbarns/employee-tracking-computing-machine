@@ -1,9 +1,18 @@
 const inquirer = require('inquirer')
 // where will i use this 
-const sql = require('mysql2')
+const mysql = require('mysql2')
 require('console.table');
 
-
+// Connect to database
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'ItXlD+xt8L#JHaGRF9',
+    database: 'tracker_db'
+  },
+  console.log(`Connected to the tracker_db database.`)
+);
 
 init()
 //prompt user to use command line
@@ -52,77 +61,48 @@ function init() {
 
       }
     })
-  }
+}
 
 
 
-function viewAllEmployees(){
+function viewAllEmployees() {
   console.log('view all employees')
   init()
 };
 
-function updateEmployeeRole(){
+function updateEmployeeRole() {
   console.log('update employee role')
   init()
 };
 
-function viewAllRoles(){
+function viewAllRoles() {
   console.log('view all roles')
   init()
 };
 
-function addRole(){
+function addRole() {
   console.log('addROLE')
   init()
 };
 
-function viewAllDepartments(){
+function viewAllDepartments() {
   console.log('view all Department')
+  // Query database 
+db.query('SELECT * FROM department', function (err, results) {
+  console.log(results);
+});
+
   init()
 };
 
 
-function addDepartment(){
+function addDepartment() {
   console.log('add Department')
   init()
 };
 
 
-function quit(){
+function quit() {
   console.log('quit')
   return;
 }
-
-    // .prompt([
-    //   {
-    //     type: 'input',
-    //     name: 'name',
-    //     message: 'What is your full name?',
-    //   },
-
-    //   {
-    //     type: 'input',
-    //     name: 'id',
-    //     message: 'What is your employee ID number?',
-    //   },
-
-    //   {
-    //     type: 'input',
-    //     name: 'email',
-    //     message: 'What is your email?',
-    //   },
-
-    //   {
-    //     type: 'input',
-    //     name: 'officeNumber',
-    //     message: 'What is your office number?',
-    //   },
-
-    // ])
-    // .then((answers) => {
-    //   const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber)
-    //   teamMembers.push(manager)
-    //   buildTeam()
-    // }
-    // )
-// }
