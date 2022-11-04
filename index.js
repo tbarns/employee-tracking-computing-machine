@@ -67,42 +67,76 @@ function init() {
 
 function viewAllEmployees() {
   console.log('view all employees')
-  init()
-};
+  db.query('SELECT * FROM employee', function (err, results) {
+    console.table(results);
+  })
 
-function updateEmployeeRole() {
-  console.log('update employee role')
   init()
 };
 
 function viewAllRoles() {
-  console.log('view all roles')
-  init()
-};
-
-function addRole() {
-  console.log('addROLE')
+  db.query('SELECT * FROM role', function (err, results) {
+    console.table(results);
+  })
   init()
 };
 
 function viewAllDepartments() {
   console.log('view all Department')
   // Query database 
-db.query('SELECT * FROM department', function (err, results) {
-  console.log(results);
-});
+  db.query('SELECT * FROM department', function (err, results) {
+    console.table(results);
+  });
 
   init()
 };
 
 
-function addDepartment() {
-  console.log('add Department')
-  init()
-};
+function addRole() {
+  console.log('addROLE')
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'title',
+        message: "What is this role's title?",
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: "What is this role's salary?",
+      },
+      {
+        type: 'input',
+        name: 'department',
+        message: "What is this role's department?",
+      },
+    ])
+    .then((answers) => {
+      const role = new role(answers.title, answers.salary, answers.department)
+      //db query to add this?
+      db.query('INSERT `${role}` INTO roles', function (err) {
 
 
-function quit() {
-  console.log('quit')
-  return;
-}
+      }
+      )})
+      init()
+    };
+
+
+
+  function addDepartment() {
+    console.log('add Department')
+    init()
+  };
+
+
+  function updateEmployeeRole() {
+    console.log('update employee role')
+    init()
+  };
+
+  function quit() {
+    console.log('quit')
+    return;
+  }
