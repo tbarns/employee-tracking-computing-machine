@@ -127,12 +127,34 @@ function addRole() {
 
   function addDepartment() {
     console.log('add Department')
+    inquirer
+    .prompt([
+ 
+      {
+        type: 'input',
+        name: 'department',
+        message: "What is this new department?",
+      },
+    ])
+    .then((answers) => {
+      const department = new department( answers.department)
+      //db query to add this?
+      db.query('INSERT `${department}` INTO department', function (err) {
+
+      }
+      )})
     init()
   };
 
 
   function updateEmployeeRole() {
     console.log('update employee role')
+
+
+
+
+
+    
     init()
   };
 
