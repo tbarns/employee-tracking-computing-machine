@@ -1,7 +1,5 @@
 const inquirer = require('inquirer')
-// where will i use this 
 const mysql = require('mysql2')
-// require('console.table');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -14,6 +12,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the tracker_db database.`)
 );
 
+//calls my inquirer prompts
 init()
 //prompt user to use command line
 function init() {
@@ -23,16 +22,27 @@ function init() {
         type: 'list',
         name: 'selection',
         message: 'What would you like to do?',
-        choices: ['Update Employee Role', new inquirer.Separator(), 'View All Roles', new inquirer.Separator(), 'View All Employees', new inquirer.Separator(), 'View All Departments', new inquirer.Separator(), 'Add Department', new inquirer.Separator(), 'Add Role', new inquirer.Separator(), 'Quit', new inquirer.Separator(), new inquirer.Separator(),]
+        choices: ['Update Employee Role',
+          new inquirer.Separator(), 'View All Roles',
+          new inquirer.Separator(), 'View All Employees',
+          new inquirer.Separator(), 'View All Departments',
+          new inquirer.Separator(), 'Add Department',
+          new inquirer.Separator(), 'Add Role',
+          new inquirer.Separator(), 'Add Employee',
+          new inquirer.Separator(), 'Quit',
+          new inquirer.Separator(), new inquirer.Separator(),]
       }
     ])
-    //make async
-    //update these to have functions that reflect each possible answer
     .then((answers) => {
       switch (answers.selection) {
         case 'Update Employee Role':
           updateEmployeeRole();
           break;
+
+        case 'Add Employee':
+          addEmployee();
+          break;
+
         case 'View All Roles':
           viewAllRoles();
           break;
@@ -56,8 +66,9 @@ function init() {
           break;
 
         default:
+          //this isnt qutting 
           console.log("Goodbye, please don't forget to clockout before going home this time Terry.")
-
+          return;
 
       }
     })
@@ -125,8 +136,8 @@ function addRole() {
         type: 'list',
         name: 'department',
         message: "What is this role's department?",
-        choices: roleChoices() 
-        
+        choices: roleChoices()
+
       },
     ])
 
@@ -137,11 +148,53 @@ function addRole() {
       db.query(`INSERT INTO roles VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
     }).then(() =>
       console.log("added role")
-    ).then(()=>
-    init()
+    ).then(() =>
+      init()
     )
 };
 
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'first',
+        message: "What is this employee's first name?",
+      },
+      {
+        type: 'input',
+        name: 'last',
+        message: "What is this employee's last name?",
+      },
+      {
+        type: 'input',
+        name: 'title',
+        message: "What is this role's title?",
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: "What is this role's salary?",
+      },
+      {
+        type: 'list',
+        name: 'department',
+        message: "What is this employee's department?",
+        choices: roleChoices()
+
+      },
+    ])
+    .then((answers) => {
+      (answers.first, answers.last, answers.title, answers.salary, answers.department)
+      //db query to add this?
+      db.query(`INSERT INTO roles VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
+    }).then(() =>
+      console.log("added employee")
+    ).then(() =>
+      init()
+    )
+}
 
 
 function addDepartment() {
@@ -152,24 +205,22 @@ function addDepartment() {
         type: 'input',
         name: 'department',
         message: "What is this new department?",
-        choices: ""
+
       },
     ])
     .then((answers) => {
-      const department = new department(answers.department)
-      //db query to add this?
-      db.query('INSERT INTO department(`${department});', function (err) {
-
-      }
-      )
-    })
-  init()
+      (answers.department)
+      db.query(`INSERT INTO department(${answers.department});`,)
+    }).then(() =>
+      console.log("added department")
+    ).then(() =>
+      init()
+    )
 };
-//add employeefunction
+
 
 function updateEmployeeRole() {
 
-  //make this inquier promt match the needs for UPDATE
   inquirer
     .prompt([
 
@@ -180,19 +231,14 @@ function updateEmployeeRole() {
       },
     ])
     .then((answers) => {
-      const department = new department(answers.department)
+      (answers.department)
       //db query needs to update employee, do i need to update more than one table?
-      db.query('UPDATE department(`${department});', function (err) {
-
-      }
-      )
-    })
-
-
-
-
-
-  init()
+      db.query(`UPDATE role(${answers.department});`)
+    }).then(() =>
+      console.log("Updated role")
+    ).then(() =>
+      init()
+    )
 };
 
 
