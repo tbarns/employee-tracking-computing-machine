@@ -107,16 +107,32 @@ function viewAllDepartments() {
 
 
 async function roleChoices() {
-
+  let choicesArray = []
   let roles = await db.promise().query('SELECT department.id, department.name FROM department;')
+  choicesArray = roles[0]
+  console.log(choicesArray)
+  let choices = Object.values(choicesArray[1])
+  console.log(choices)
 
 
-  let choices = roles[0].map(({ id, name }) => ({
-    value: id,
-    name: name
+//these are my conoslo logs
 
-  }))
-console.log(choices)
+//each one is an object and i need to ge tthe values on each object but at indexc 1 of each object
+// { id: 1, name: 'Accounting' },
+// { id: 2, name: 'IT' },
+// { id: 3, name: 'Sales' }
+// ]
+// [ 2, 'IT' ]
+
+
+
+  // for (let i = 0; i < choices[1].length; i++) {
+  //   const el = choices[i];
+  //   choicesArray.push(el)
+
+  // }
+
+  // console.log(choicesArray)
   return choices;
 }
 
