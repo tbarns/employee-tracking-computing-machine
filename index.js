@@ -1,6 +1,8 @@
 const inquirer = require('inquirer')
 const mysql = require('mysql2')
 
+
+
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -114,7 +116,7 @@ async function roleChoices() {
     name: name
 
   }))
-
+console.log(choices)
   return choices;
 }
 
@@ -122,16 +124,16 @@ function addRole() {
 
   inquirer
     .prompt([
-      // {
-      //   type: 'input',
-      //   name: 'title',
-      //   message: "What is this role's title?",
-      // },
-      // {
-      //   type: 'input',
-      //   name: 'salary',
-      //   message: "What is this role's salary?",
-      // },
+      {
+        type: 'input',
+        name: 'title',
+        message: "What is this role's title?",
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: "What is this role's salary?",
+      },
       {
         type: 'list',
         name: 'department',
