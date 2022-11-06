@@ -1,7 +1,7 @@
 const inquirer = require('inquirer')
 // where will i use this 
 const mysql = require('mysql2')
-require('console.table');
+// require('console.table');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -26,7 +26,7 @@ function init() {
         choices: ['Update Employee Role', new inquirer.Separator(), 'View All Roles', new inquirer.Separator(), 'View All Employees', new inquirer.Separator(), 'View All Departments', new inquirer.Separator(), 'Add Department', new inquirer.Separator(), 'Add Role', new inquirer.Separator(), 'Quit', new inquirer.Separator(), new inquirer.Separator(),]
       }
     ])
-
+    //make async
     //update these to have functions that reflect each possible answer
     .then((answers) => {
       switch (answers.selection) {
@@ -56,8 +56,8 @@ function init() {
           break;
 
         default:
-          //change to a quit function
-          quit()
+          console.log("Goodbye, please don't forget to clockout before going home this time Terry.")
+
 
       }
     })
@@ -66,8 +66,8 @@ function init() {
 
 
 function viewAllEmployees() {
-  console.log('view all employees')
-  db.query('SELECT * FROM employee', function (err, results) {
+  db.query('SELECT * FROM employee;', function (err, results) {
+    console.log("\n");
     console.table(results);
   })
 
@@ -75,16 +75,17 @@ function viewAllEmployees() {
 };
 
 function viewAllRoles() {
-  db.query('SELECT * FROM role', function (err, results) {
+  db.query('SELECT * FROM role;', function (err, results) {
+    console.log("\n");
     console.table(results);
   })
   init()
 };
 
 function viewAllDepartments() {
-  console.log('view all Department')
   // Query database 
-  db.query('SELECT * FROM department', function (err, results) {
+  db.query('SELECT * FROM department;', function (err, results) {
+    console.log("\n");
     console.table(results);
   });
 
@@ -92,44 +93,86 @@ function viewAllDepartments() {
 };
 
 
+async function roleChoices() {
+
+  let roles = await db.promise().query('SELECT department.id, department.name FROM department;')
+
+
+  let choices = roles[0].map(({ id, name }) => ({
+    value: id,
+    name: name
+
+  }))
+
+  return choices;
+}
+
 function addRole() {
-  console.log('addROLE')
+
   inquirer
     .prompt([
+      // {
+      //   type: 'input',
+      //   name: 'title',
+      //   message: "What is this role's title?",
+      // },
+      // {
+      //   type: 'input',
+      //   name: 'salary',
+      //   message: "What is this role's salary?",
+      // },
       {
-        type: 'input',
-        name: 'title',
-        message: "What is this role's title?",
+        type: 'list',
+        name: 'department',
+        message: "What is this role's department?",
+        choices: roleChoices() 
+        
       },
-      {
-        type: 'input',
-        name: 'salary',
-        message: "What is this role's salary?",
-      },
+    ])
+
+    //async
+    .then((answers) => {
+      (answers.title, answers.salary, answers.department)
+      //db query to add this?
+      db.query(`INSERT INTO roles VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
+    }).then(() =>
+      console.log("added role")
+    ).then(()=>
+    init()
+    )
+};
+
+
+
+function addDepartment() {
+  inquirer
+    .prompt([
+
       {
         type: 'input',
         name: 'department',
-        message: "What is this role's department?",
+        message: "What is this new department?",
+        choices: ""
       },
     ])
     .then((answers) => {
-      const role = new role(answers.title, answers.salary, answers.department)
+      const department = new department(answers.department)
       //db query to add this?
-      db.query('INSERT `${role}` INTO roles', function (err) {
-
+      db.query('INSERT INTO department(`${department});', function (err) {
 
       }
-      )})
-      init()
-    };
+      )
+    })
+  init()
+};
+//add employeefunction
 
+function updateEmployeeRole() {
 
-
-  function addDepartment() {
-    console.log('add Department')
-    inquirer
+  //make this inquier promt match the needs for UPDATE
+  inquirer
     .prompt([
- 
+
       {
         type: 'input',
         name: 'department',
@@ -137,28 +180,19 @@ function addRole() {
       },
     ])
     .then((answers) => {
-      const department = new department( answers.department)
-      //db query to add this?
-      db.query('INSERT `${department}` INTO department', function (err) {
+      const department = new department(answers.department)
+      //db query needs to update employee, do i need to update more than one table?
+      db.query('UPDATE department(`${department});', function (err) {
 
       }
-      )})
-    init()
-  };
-
-
-  function updateEmployeeRole() {
-    console.log('update employee role')
+      )
+    })
 
 
 
 
 
-    
-    init()
-  };
+  init()
+};
 
-  function quit() {
-    console.log('quit')
-    return;
-  }
+
