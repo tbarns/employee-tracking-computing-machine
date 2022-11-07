@@ -20,60 +20,67 @@ init()
 function init() {
   inquirer
     .prompt([
+
       {
         type: 'list',
         name: 'selection',
-        message: 'What would you like to do?',
-        choices: ['Update Employee Role',
-          new inquirer.Separator(), 'View All Roles',
-          new inquirer.Separator(), 'View All Employees',
-          new inquirer.Separator(), 'View All Departments',
-          new inquirer.Separator(), 'Add Department',
-          new inquirer.Separator(), 'Add Role',
-          new inquirer.Separator(), 'Add Employee',
-          new inquirer.Separator(), 'Quit',
+        message: '\033[35m  What would you like to do?',
+        choices: ['\033[34m Update Employee Role',
+          new inquirer.Separator(), '\033[35m View All Roles',
+          new inquirer.Separator(), '\033[34m View All Employees',
+          new inquirer.Separator(), '\033[35m View All Departments',
+          new inquirer.Separator(), '\033[34m  Add Department',
+          new inquirer.Separator(), '\033[35m Add Role',
+          new inquirer.Separator(), '\033[34m Add Employee',
+          new inquirer.Separator(), '\033[35m\033[35m\x1b[5m Quit',
           new inquirer.Separator(), new inquirer.Separator(),]
       }
     ])
     .then((answers) => {
       switch (answers.selection) {
-        case 'Update Employee Role':
+        case '\033[34m Update Employee Role':
           updateEmployeeRole();
           break;
 
-        case 'Add Employee':
+        case '\033[34m Add Employee':
           addEmployee();
           break;
 
-        case 'View All Roles':
+        case '\033[35m View All Roles':
           viewAllRoles();
+          console.clear();
+          console.log("(Move up and down to reveal more choices)")
           break;
 
-        case 'Add Role':
+        case '\033[35m Add Role':
           addRole();
           break;
-        case 'View All Departments':
+        case '\033[35m View All Departments':
           viewAllDepartments();
+          console.clear();
+          console.log("(Move up and down to reveal more choices)")
           break;
 
-        case 'Add Department':
+        case '\033[34m Add Department':
           addDepartment();
           break;
-        case 'View All Employees':
+        case '\033[34m View All Employees':
           viewAllEmployees();
+          console.clear();
+          console.log("(Move up and down to reveal more choices)")
           break;
 
-        case 'Quit':
-          viewAllDepartments();
+        case '\033[35m\033[35m\x1b[5m Quit':
+          console.log("Goodbye, please don't forget to clockout before going home this time Terry.")
           break;
 
         default:
-          //this isnt qutting 
-          console.log("Goodbye, please don't forget to clockout before going home this time Terry.")
+
+          console.log("error.")
           return;
 
       }
-    })
+          })
 }
 
 
@@ -108,32 +115,16 @@ function viewAllDepartments() {
 
 async function roleChoices() {
   let choicesArray = []
+  departmentArray = []
   let roles = await db.promise().query('SELECT department.id, department.name FROM department;')
   choicesArray = roles[0]
-  console.log(choicesArray)
-  let choices = Object.values(choicesArray[1])
-  console.log(choices)
 
+  for (let i = 0; i < choicesArray.length; i++) {
+    const el = choicesArray[i].name;
+    departmentArray.push(el)
 
-//these are my conoslo logs
-
-//each one is an object and i need to ge tthe values on each object but at indexc 1 of each object
-// { id: 1, name: 'Accounting' },
-// { id: 2, name: 'IT' },
-// { id: 3, name: 'Sales' }
-// ]
-// [ 2, 'IT' ]
-
-
-
-  // for (let i = 0; i < choices[1].length; i++) {
-  //   const el = choices[i];
-  //   choicesArray.push(el)
-
-  // }
-
-  // console.log(choicesArray)
-  return choices;
+  }
+  return departmentArray
 }
 
 function addRole() {
@@ -154,7 +145,7 @@ function addRole() {
         type: 'list',
         name: 'department',
         message: "What is this role's department?",
-        choices: roleChoices()
+        choices: async () => { return await roleChoices(); }
 
       },
     ])
@@ -163,7 +154,7 @@ function addRole() {
     .then((answers) => {
       (answers.title, answers.salary, answers.department)
       //db query to add this?
-      db.query(`INSERT INTO roles VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
+      db.query(`INSERT INTO role VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
     }).then(() =>
       console.log("added role")
     ).then(() =>
@@ -213,6 +204,7 @@ function addEmployee() {
       init()
     )
 }
+
 
 
 function addDepartment() {
