@@ -29,7 +29,7 @@ function init() {
           new inquirer.Separator(), '\033[35m View All Roles',
           new inquirer.Separator(), '\033[34m View All Employees',
           new inquirer.Separator(), '\033[35m View All Departments',
-          new inquirer.Separator(), '\033[34m  Add Department',
+          new inquirer.Separator(), '\033[34m Add Department',
           new inquirer.Separator(), '\033[35m Add Role',
           new inquirer.Separator(), '\033[34m Add Employee',
           new inquirer.Separator(), '\033[35m\033[35m\x1b[5m Quit',
@@ -119,15 +119,15 @@ async function roleChoices() {
   let roles = await db.promise().query('SELECT department.id, department.name FROM department;')
   choicesArray = roles[0]
   // console.log(roles)
-  // console.log(choicesArray)
+  console.log(choicesArray)
 
-  for (let i = 0; i < choicesArray.length; i++) {
-    const el = choicesArray[i].name;
-    departmentArray.push(el)
+  // for (let i = 0; i < choicesArray.length; i++) {
+  //   const el = choicesArray[i];
+  //   departmentArray.push(el)
 
-  }
+  // }
   // console.log(departmentArray)
-  return departmentArray
+  return choicesArray
 }
 
 function addRole() {
@@ -140,7 +140,7 @@ function addRole() {
         message: "What is this role's title?",
       },
       {
-        type: 'input',
+        type: 'number',
         name: 'salary',
         message: "What is this role's salary?",
       },
@@ -157,7 +157,10 @@ function addRole() {
     .then((answers) => {
       (answers.title, answers.salary, answers.department)
       //db query to add this?
-      db.query(`INSERT INTO role VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
+      console.log(answers.department)
+      console.log(answers)
+      db.query(`INSERT INTO role (title, salary, department_id)
+       VALUES ('${answers.title}', ${answers.salary}, '${answers.department}');`)
     }).then(() =>
       console.log("added role")
     ).then(() =>
@@ -185,7 +188,7 @@ function addEmployee() {
         message: "What is this role's title?",
       },
       {
-        type: 'input',
+        type: 'number',
         name: 'salary',
         message: "What is this role's salary?",
       },
@@ -200,7 +203,7 @@ function addEmployee() {
     .then((answers) => {
       (answers.first, answers.last, answers.title, answers.salary, answers.department)
       //db query to add this?
-      db.query(`INSERT INTO roles VALUES (${answers.title}, ${answers.salary}, ${answers.department});`)
+      db.query(`INSERT INTO role VALUES ('${answers.title}', ${answers.salary}, '${answers.department}');`)
     }).then(() =>
       console.log("added employee")
     ).then(() =>
@@ -223,7 +226,7 @@ function addDepartment() {
     ])
     .then((answers) => {
       (answers.department)
-      db.query(`INSERT INTO department(${answers.department});`,)
+      db.query(`INSERT INTO department (name) VALUES ('${answers.department}');`,)
     }).then(() =>
       console.log("added department")
     ).then(() =>
