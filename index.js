@@ -118,15 +118,15 @@ async function roleChoices() {
   departmentArray = []
   let roles = await db.promise().query('SELECT department.id, department.name FROM department;')
   choicesArray = roles[0]
-  console.log(roles)
-  console.log(choicesArray)
+  // console.log(roles)
+  // console.log(choicesArray)
 
   for (let i = 0; i < choicesArray.length; i++) {
     const el = choicesArray[i].name;
     departmentArray.push(el)
 
   }
-  console.log(departmentArray)
+  // console.log(departmentArray)
   return departmentArray
 }
 
