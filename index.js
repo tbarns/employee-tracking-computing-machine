@@ -203,7 +203,7 @@ function addEmployee() {
     .then((answers) => {
       (answers.first, answers.last, answers.title, answers.salary, answers.department)
       //db query to add this?
-      db.query(`INSERT INTO role VALUES ('${answers.title}', ${answers.salary}, '${answers.department}');`)
+      db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answers.title}', ${answers.salary}, '${answers.department}');`)
     }).then(() =>
       console.log("added employee")
     ).then(() =>
@@ -241,15 +241,16 @@ function updateEmployeeRole() {
     .prompt([
 
       {
-        type: 'input',
+        type: 'list',
         name: 'department',
         message: "What is this new department?",
+        choices: async () => { return await roleChoices(); }
       },
     ])
     .then((answers) => {
       (answers.department)
       //db query needs to update employee, do i need to update more than one table?
-      db.query(`UPDATE role(${answers.department});`)
+      db.query(`UPDATE role (department_id) VALUES ('${answers.department}');`)
     }).then(() =>
       console.log("Updated role")
     ).then(() =>
