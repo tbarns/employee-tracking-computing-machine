@@ -21,7 +21,8 @@ run node on the command line
 ## Usage
 The CLI will prompt users to access the database and by using the prompts the user can updates tables in the database.
 below is a link to a video outlining the usage.
-<!-- INLCIDE VIDEO LINK HERE -->
+ <br />
+(https://app.castify.com/view/162d4564-4390-4380-8ca2-55bff104139a)
 
 ## License 
 MIT License
